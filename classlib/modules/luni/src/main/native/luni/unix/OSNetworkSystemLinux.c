@@ -19,7 +19,7 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
-#if defined(FREEBSD)
+#if defined(FREEBSD) || defined(MACOSX)
 /*
  * Function definition is in <sys/uio.h> under FreeBSD.
  */

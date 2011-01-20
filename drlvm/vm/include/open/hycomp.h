@@ -77,7 +77,7 @@
  * <li><code>BOOLEAN</code>      - something that can be zero or non-zero</li>
  * </ul>
  */
-#if defined(LINUX) || defined(FREEBSD)
+#if defined(LINUX) || defined(FREEBSD) || defined(__APPLE__)
 #if defined(_EM64T_) || defined(_IPF_)
 typedef long int I_64;
 typedef unsigned long int U_64;

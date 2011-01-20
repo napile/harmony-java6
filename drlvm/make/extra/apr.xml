@@ -60,7 +60,7 @@
             <replacefilter token="APR_HAS_POSIXSEM_SERIALIZE        0" value="APR_HAS_POSIXSEM_SERIALIZE        1" />
             <replacefilter token="#define APR_HAS_PROC_PTHREAD_SERIALIZE    0" value="#define APR_HAS_PROC_PTHREAD_SERIALIZE    1" />
         </replace>
-        <condition property="extra.flags" value="-fpic" else="">
+        <condition property="extra.flags" value="-fPIC" else="">
             <isset property="is.x86_64"/>
         </condition>
         <replace file="${apr.src}/build/apr_rules.mk" token="CFLAGS=" value="CFLAGS=${extra.flags} "/>

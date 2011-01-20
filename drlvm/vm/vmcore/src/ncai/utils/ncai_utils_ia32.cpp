@@ -116,6 +116,47 @@ static void ncai_registers_to_context(NcaiRegisters* pregs, ucontext_t* pcontext
     pcontext->uc_mcontext.mc_eip  = pregs->eip;
     pcontext->uc_mcontext.mc_eflags  = pregs->eflags;
 }
+#elif defined(MACOSX)
+
+static void ncai_context_to_registers(ucontext_t* pcontext, NcaiRegisters* pregs)
+{
+    pregs->eax  = pcontext->uc_mcontext->__ss.__eax;
+    pregs->ebx  = pcontext->uc_mcontext->__ss.__ebx;
+    pregs->ecx  = pcontext->uc_mcontext->__ss.__ecx;
+    pregs->edx  = pcontext->uc_mcontext->__ss.__edx;
+    pregs->esp  = pcontext->uc_mcontext->__ss.__esp;
+    pregs->ebp  = pcontext->uc_mcontext->__ss.__ebp;
+    pregs->esi  = pcontext->uc_mcontext->__ss.__esi;
+    pregs->edi  = pcontext->uc_mcontext->__ss.__edi;
+    pregs->ds = pcontext->uc_mcontext->__ss.__ds;
+    pregs->es = pcontext->uc_mcontext->__ss.__es;
+    pregs->fs = pcontext->uc_mcontext->__ss.__fs;
+    pregs->gs = pcontext->uc_mcontext->__ss.__gs;
+    pregs->ss = pcontext->uc_mcontext->__ss.__ss;
+    pregs->cs = pcontext->uc_mcontext->__ss.__cs;
+    pregs->eip    = pcontext->uc_mcontext->__ss.__eip;
+    pregs->eflags = pcontext->uc_mcontext->__ss.__eflags;
+}
+
+static void ncai_registers_to_context(NcaiRegisters* pregs, ucontext_t* pcontext)
+{
+    pcontext->uc_mcontext->__ss.__eax  = pregs->eax;
+    pcontext->uc_mcontext->__ss.__ebx  = pregs->ebx;
+    pcontext->uc_mcontext->__ss.__ecx  = pregs->ecx;
+    pcontext->uc_mcontext->__ss.__edx  = pregs->edx;
+    pcontext->uc_mcontext->__ss.__esp  = pregs->esp;
+    pcontext->uc_mcontext->__ss.__ebp  = pregs->ebp;
+    pcontext->uc_mcontext->__ss.__esi  = pregs->esi;
+    pcontext->uc_mcontext->__ss.__edi  = pregs->edi;
+    pcontext->uc_mcontext->__ss.__ds = pregs->ds;
+    pcontext->uc_mcontext->__ss.__es = pregs->es;
+    pcontext->uc_mcontext->__ss.__fs = pregs->fs;
+    pcontext->uc_mcontext->__ss.__gs = pregs->gs;
+    pcontext->uc_mcontext->__ss.__ss = pregs->ss;
+    pcontext->uc_mcontext->__ss.__cs = pregs->cs;
+    pcontext->uc_mcontext->__ss.__eip  = pregs->eip;
+    pcontext->uc_mcontext->__ss.__eflags  = pregs->eflags;
+}
 #else
 
 #ifdef PLATFORM_POSIX

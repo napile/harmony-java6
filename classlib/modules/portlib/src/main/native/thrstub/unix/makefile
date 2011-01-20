@@ -22,7 +22,9 @@ include $(HY_TARGET)/hdk/build/make/defines.mk
 
 BUILDFILES = hythread.o
 
-DLLNAME = $(LIBPATH)libhythr$(HY_SHLIB_SUFFIX)
+MDLLIBFILES = 
+# DLLNAME = $(LIBPATH)libhythr$(HY_SHLIB_SUFFIX)
+DLLNAME = $(HY_BIN)libhythr$(HY_SHLIB_SUFFIX)
 DBGPATH = $(LIBPATH)
 EXPNAME = HYTHR_0.2
 

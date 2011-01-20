@@ -58,7 +58,7 @@
         <unzip src="${icudll}" dest="${drlvm.lib.dir}">
             <patternset> 
                 <include name="*${linklib.suffix}" unless="shlib.is.linklib"/>
-                <exclude name="*" if="shlib.is.linklib"/>
+                <!-- <exclude name="*" if="shlib.is.linklib"/> -->
                 <exclude name="*ICUInterface*" />
             </patternset>
         </unzip>
@@ -180,6 +180,9 @@
             <defineset define="BUILDING_VM,APR_DECLARE_STATIC" />
         </compiler>
         </compile-cc>
+
+        <!-- FIXME PMQ -->
+        <!-- <delete file="/usr/local/src/harmony-java6-trunk/target/hdk/lib/libhythr.dylib"/> -->
         
         <link-lib name="harmonyvm" type="shared">
             <linker id="linker" extends="common.linker">
@@ -191,14 +194,17 @@
                 <libset libs="hyzlib" dir="${hy.hdk.shlibs}"
                         unless="hy.skip.zlib"/>
                 <syslibset type="shared" libs="z" if="hy.skip.zlib"/>
+                <libset libs="m,stdc++,pthread" if="is.macosx"/>
 
                 <linkerarg value="/DEF:${vm.home}/vmcore/src/harmonyvm64.def" if="is.windows.x86_64"/>
                 <linkerarg value="/DEF:${vm.home}/vmcore/src/harmonyvm.def" if="is.windows.x86"/>
-                <linkerarg value="--version-script=${vm.home}/vmcore/build/vmcore.exp" if="is.unix"/>
+                <linkerarg value="--version-script=${vm.home}/vmcore/build/vmcore.exp" if="is.unix" unless="is.macosx"/>
                 
                 <syslibset type="shared" libs="m,dl,stdc++,pthread,gcc_s,rt" if="is.linux"/>
                 <syslibset type="shared" libs="m,stdc++,pthread" if="is.freebsd"/> 
                 <linkerarg value="--export-dynamic" if="is.freebsd"/>
+                <linkerarg value="-undefined" if="is.macosx"/>
+                <linkerarg value="dynamic_lookup" if="is.macosx"/>
             </linker>
         </link-lib>        
         

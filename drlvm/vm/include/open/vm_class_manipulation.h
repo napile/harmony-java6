@@ -23,6 +23,11 @@
 #include "open/types.h"
 #include "open/common.h"
 
+#if defined(MACOSX)
+#include <stdbool.h>
+#define BOOLEAN bool
+#endif
+
 /**
  * @file
  * Part of Class Support interface related to retrieving and changing

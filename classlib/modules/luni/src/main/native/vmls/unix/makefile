@@ -24,4 +24,8 @@ INCLUDES += -I../../include/shared
 BUILDFILES = vmls.o
 LIBNAME = $(LIBPATH)libhyvmls.a
 
+# ifeq ($(HY_NO_THR),true)
+# CFLAGS += -DHY_NO_THR
+# endif
+
 include $(HY_TARGET)/hdk/build/make/rules.mk

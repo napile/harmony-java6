@@ -140,7 +140,7 @@ extern "C" {
  */
 //@{
 
-#if defined(LINUX) || defined(FREEBSD)
+#if defined(LINUX) || defined(FREEBSD) || defined(__APPLE__)
 #include <pthread.h>
 #define osmutex_t pthread_mutex_t
 #define hycond_t pthread_cond_t
@@ -152,7 +152,7 @@ extern "C" {
 #include "hycond_win.h"
 #endif // _WIN32
 
-#if defined(__linux__) || defined(FREEBSD)
+#if defined(__linux__) || defined(FREEBSD) || defined(__APPLE__)
 
 #include <sys/ucontext.h>
 #define osthread_t pthread_t
@@ -164,7 +164,7 @@ extern "C" {
 #define thread_context_t CONTEXT
 
 #else // !_WIN32 && !__linux__
-#error "threading is only supported on __linux__ or _WIN32"
+#error "threading is only supported on __linux__ or _WIN32 or __APPLE__"
 #endif // !_WIN32 && !__linux__
 
 #if !defined (_IPF_)

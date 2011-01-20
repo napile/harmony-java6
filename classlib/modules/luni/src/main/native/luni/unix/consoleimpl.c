@@ -15,6 +15,10 @@
  *  limitations under the License.
  */
  
+#if defined(MACOSX)
+#include <unistd.h>
+#endif
+
  #include <termios.h>
  #include "exceptions.h"
  #include "consoleimpl.h"

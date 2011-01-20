@@ -17,9 +17,9 @@
 //
 	.text
 	.align 2
-.globl invokeJNI
-	.type	invokeJNI, @function
-invokeJNI:
+.globl _invokeJNI
+//	.type	invokeJNI, @function
+_invokeJNI:
 
 	push	%ebp
 	movl	%esp, %ebp

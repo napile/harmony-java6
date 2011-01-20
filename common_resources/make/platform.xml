@@ -257,6 +257,11 @@
         <equals arg1="${shlib.suffix}" arg2="${linklib.suffix}"/>
     </condition>
 
+    <!-- PMQ DEBUG -->
+    <echo message="PMQ shlib.suffix=${shlib.suffix}"/>
+    <echo message="PMQ linklib.suffix=${linklib.suffix}"/>
+    <echo message="PMQ shlib.is.linklib=${shlib.is.linklib}"/>
+
     <condition property="lib.prefix" value="">
         <isset property="is.windows"/>
     </condition>
@@ -276,6 +281,7 @@
         <or>
             <isset property="is.aix"/>
             <isset property="is.freebsd"/>
+            <!-- <isset property="is.macosx"/> -->
             <isset property="is.zos"/>
         </or>
     </condition>

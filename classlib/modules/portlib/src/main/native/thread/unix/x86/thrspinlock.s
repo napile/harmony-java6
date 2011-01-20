@@ -33,17 +33,17 @@ HYTHREAD_MONITOR_SPINLOCK_UNOWNED = 0
        	#CODE32 ends
        	#CODE32 SEGMENT FLAT PUBLIC 'CODE'
        	#assume cs:flat,ds:flat,ss:flat
-        .globl hythread_yield # an extern
-        .globl hythread_spinlock_acquire
-        .type hythread_spinlock_acquire,@function
-        .globl hythread_spinlock_swapState
-        .type hythread_spinlock_swapState,@function
+        .globl _hythread_yield # an extern
+        .globl _hythread_spinlock_acquire
+//        .type hythread_spinlock_acquire,@function
+        .globl _hythread_spinlock_swapState
+//        .type hythread_spinlock_swapState,@function
 ## Prototype: IDATA hythread_spinlock_acquire(hythread_t self, hythread_monitor_t monitor);
 ## Defined in: #THREAD Args: 2
 
         .text
         .align 4
-hythread_spinlock_acquire:
+_hythread_spinlock_acquire:
         push %ebp
         mov %esp, %ebp
         push %esi
@@ -79,7 +79,7 @@ hythread_spinlock_acquire:
         jnz .L3
         movl %ecx, 64(%esp)                      ## save VMtemp3_1_3_(HyThreadAbstractMonitor->spinCount3)
         movl %edx, 68(%esp)                      ## save VMtemp3_1_2_(struct HyThreadAbstractMonitor*) in_HyVMThreadSpinlocks>>#hythread_spinlock_acquire
-        call hythread_yield
+        call _hythread_yield
         movl 64(%esp), %ecx                      ## load VMtemp3_1_3_(HyThreadAbstractMonitor->spinCount3)
         decl %ecx                                ## setFlags: true(Converted subtract 1 to dec)
         movl 68(%esp), %edx                      ## load VMtemp3_1_2_(struct HyThreadAbstractMonitor*) in_HyVMThreadSpinlocks>>#hythread_spinlock_acquire
@@ -94,14 +94,14 @@ hythread_spinlock_acquire:
         pop %ebp
         ret
 END_hythread_spinlock_acquire:
-        .size hythread_spinlock_acquire,END_hythread_spinlock_acquire - hythread_spinlock_acquire
+//        .size hythread_spinlock_acquire,END_hythread_spinlock_acquire - hythread_spinlock_acquire
 
 ## Prototype: UDATA hythread_spinlock_swapState(hythread_monitor_t monitor, UDATA newState);
 ## Defined in: #THREAD Args: 2
 
         .text
         .align 4
-hythread_spinlock_swapState:
+_hythread_spinlock_swapState:
         push %ebp
         mov %esp, %ebp
         push %esi
@@ -126,7 +126,7 @@ hythread_spinlock_swapState:
         pop %ebp
         ret
 END_hythread_spinlock_swapState:
-        .size hythread_spinlock_swapState,END_hythread_spinlock_swapState - hythread_spinlock_swapState
+//        .size hythread_spinlock_swapState,END_hythread_spinlock_swapState - hythread_spinlock_swapState
 
        	#CODE32 ends
         # end of file

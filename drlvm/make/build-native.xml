@@ -85,12 +85,21 @@
 
         <property name="hy.asm.compiler" value="${hy.cpp.compiler}"/>
 
-           <condition property="asm.flags" value="-Wa,--fatal-warnings -c -x assembler-with-cpp -g">
-            <or>
-                <equals arg1="icc" arg2="${hy.asm.compiler}" />
-                <equals arg1="gcc" arg2="${hy.asm.compiler}" />
-            </or>
+        <condition property="asm.flags" value="-Wa,--fatal-warnings -c -x assembler-with-cpp -g">
+            <and>
+                <or>
+                    <equals arg1="icc" arg2="${hy.asm.compiler}" />
+                    <equals arg1="gcc" arg2="${hy.asm.compiler}" />
+                </or>
+		<!-- FIXME -->
+                <isset property="is.linux"/>
+	    </and>
         </condition>
+        <!-- FIXME do sth better -->
+        <condition property="asm.flags" value="-c -x assembler-with-cpp -g">
+            <isset property="is.macosx"/>
+        </condition>
+
         <condition property="asm.obj.switch" value="-o">
             <or>
                 <equals arg1="${hy.cpp.compiler}" arg2="gcc"/>
@@ -130,8 +139,9 @@
                 <mkdir dir="${component.obj.dir}" />
             </sequential>
         </macrodef>
-        
+
         <presetdef name="compile-cc">
+            <!-- warnings="diagnostic" -->
             <cc objdir="${component.obj.dir}" 
                 debug="${cfg.is.debug}" 
                 name="${hy.cpp.compiler}"
@@ -139,7 +149,7 @@
                 <compilerarg value="/FR${component.obj.dir}\" if="is.windows"/>
                 <compilerarg value="/Fd${component.obj.dir}\" if="is.windows"/>
                 <compilerarg value="/Zi" if="is.windows"/>
-                <compilerarg value="-fpic" if="is.unix"/>
+                <compilerarg value="-fPIC" if="is.unix"/>
             </cc>
         </presetdef>
 
@@ -158,7 +168,7 @@
                 <cc objdir="${component.obj.dir}"
                     outfile="${component.bin.dir}/@{libname}" 
                     outtype="@{type}"
-                    debug="${cfg.is.debug}" 
+                    debug="${cfg.is.debug}"
                     name="${hy.cpp.compiler}"
                     subsystem="console">
                     <linkerarg value="/pdb:${component.bin.dir}/@{libname}.pdb" if="component.need.pdb" />

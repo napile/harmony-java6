@@ -32,6 +32,13 @@ endif
 
 MDLLIBFILES += $(LIBPATH)libvmi$(HY_LINKLIB_SUFFIX)
 
+# FIXME PMQ this is dirty, override -fno-common
+# OPT = -DPMQ_OPT
+PLATFORM = -fPIC
+# WARNFLAGS =
+# CFLAGS = 
+# CPPFLAGS =
+
 DLLNAME = $(DLLPATH)libhyinstrument$(HY_SHLIB_SUFFIX)
 EXPNAME = HYINSTRUMENT_0.1
 

@@ -20,6 +20,11 @@
 #include <set>
 #include "thread_dump.h"
 
+#if defined(MACOSX)
+#include <stdbool.h>
+#define BOOLEAN bool
+#endif
+
 static std::set < void *>unique_references;
 
 enum reference_types

@@ -24,6 +24,7 @@
 
 #include "../common/gc_space.h"
 #include "../common/gc_metadata.h"
+#include "../common/gc_platform.h"
 
 #define ALLOC_ZEROING
 

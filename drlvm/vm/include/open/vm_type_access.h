@@ -19,6 +19,12 @@
 
 #include "common.h"
 #include "types.h"
+
+#if defined(MACOSX)
+#include <stdbool.h>
+#define BOOLEAN bool
+#endif
+
 /**
  * @file
  * Part of Class Support interface related to accessing generalized

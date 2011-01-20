@@ -32,9 +32,9 @@
 //
 // void port_transfer_to_regs(Registers* regs)
 
-.globl port_transfer_to_regs
-	.type	port_transfer_to_regs, @function
-port_transfer_to_regs:
+.globl _port_transfer_to_regs
+//	.type	port_transfer_to_regs, @function
+_port_transfer_to_regs:
     movl    0x04(%esp), %edx // store regs pointer to EDX
     movl    0x20(%edx), %ebx // EIP field -> EBX
     movl    0x1C(%edx), %ecx // ESP field
@@ -88,9 +88,9 @@ _label_:
 // |  from 'fn'  | <- address to return to the port_longjump_stub
 // |-------------|
 
-.globl port_longjump_stub
-	.type	port_longjump_stub, @function
-port_longjump_stub:
+.globl _port_longjump_stub
+//	.type	port_longjump_stub, @function
+_port_longjump_stub:
     movl    %ebp, %esp    // ESP now points to the address of saved Registers
-    call    port_transfer_to_regs   // restore context
+    call    _port_transfer_to_regs   // restore context
     ret                             // dummy RET - unreachable

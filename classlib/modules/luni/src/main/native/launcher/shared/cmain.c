@@ -75,6 +75,7 @@ main (int argc, char **argv, char **envp)
   ConvertArgstoASCII(argc, argv);
 #endif
 
+  printf("PMQ - #1\n");
   /* determine which VM directory to use and add it to the path */
   rc = main_addVMDirToPath(argc, argv, envp);
   if ( 0 != rc ) {
@@ -85,11 +86,12 @@ main (int argc, char **argv, char **envp)
 	  fprintf( stderr, "failed to open hyprt library.\n" );
 	  return -1;
   }
-  if ( 0 != main_lookup_name( portLibDescriptor, "hyport_init_library", (UDATA *)&port_init_library_func) ) {
+  if ( 0 != main_lookup_name( portLibDescriptor, "_hyport_init_library", (UDATA *)&port_init_library_func) ) {
 	  fprintf( stderr, "failed to find hyport_init_library function in hyprt library\n" );
 	  return -1;
   }
 #endif /* HY_NO_THR */
+  printf("PMQ - #2\n");
   /* Use portlibrary version which we compiled against, and have allocated space
    * for on the stack.  This version may be different from the one in the linked DLL.
    */
@@ -101,6 +103,12 @@ main (int argc, char **argv, char **envp)
 	  port_init_library_func (&hyportLibrary, &portLibraryVersion,
 #endif /* HY_NO_THR */
                                   sizeof (HyPortLibrary));
+   printf("PMQ - #3\n");
+#ifndef HY_NO_THR
+			   printf("PMQ - #4 hyportLibrary= portLibraryVersion= hyport_init_library=%p\n", &hyport_init_library);
+#else
+			   printf("PMQ - #5 hyportLibrary= portLibraryVersion= port_init_library_func=%p\n", &port_init_library_func);
+#endif
    if (rc == 0)
     {
       options.argc = argc;

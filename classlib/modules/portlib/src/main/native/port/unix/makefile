@@ -24,17 +24,20 @@ INCLUDES += -DHYPORT_LIBRARY_DEFINE -I$(HY_PLATFORM)
 
 BUILDFILES = \
   port_copyright.o hyerror.o hyerrorhelpers.o hyexit.o hyfile.o hyfiletext.o \
-  hygp.o hymem.o /hymmap.o hynls.o hynlshelpers.o hyosdump.o hyport.o \
+  hygp.o hymem.o hymmap.o hynls.o hynlshelpers.o hyosdump.o hyport.o \
   hyportcontrol.o hyportptb.o hysharedhelper.o hysl.o hysock.o hystr.o \
   hystrftime.o hystsl.o hysysinfo.o hytime.o hytlshelpers.o hytty.o hycpu.o \
   hyipcmutex.o hyshmem.o hyshsem.o hyvmem.o
 
 
-ifeq ($(HY_NO_THR),true)
+#ifeq ($(HY_NO_THR),true)
 MDLLIBFILES += $(LIBPATH)libhythr$(HY_LINKLIB_SUFFIX)
-endif
-DLLNAME = $(DLLPATH)libhyprt$(HY_SHLIB_SUFFIX)
+#endif
+# DLLNAME = $(DLLPATH)libhyprt$(HY_SHLIB_SUFFIX)
+DLLNAME = $(HY_BIN)libhyprt$(HY_SHLIB_SUFFIX)
 EXPNAME = HYPRT_0.1
+# FIXME PMQ see why HY_NOT_THR=false
+# CFLAGS += -DHY_NO_THR
 
 include $(HY_TARGET)/hdk/build/make/rules.mk
 

@@ -29,6 +29,9 @@ BUILDFILES += main_hlp.o
 endif
 EXENAME = $(EXEPATH)java
 
+# CFLAGS += -arch x86_64 -mmacosx-version-min=10.5
+CFLAGS += -mmacosx-version-min=10.5
+
 ifeq ($(HY_OS),zos)
 # On z/OS statically link the a2e lib so it can be used before LIBPATH is set
 MDLLIBFILES = $(LIBPATH)libhya2e.a $(LIBPATH)libhycommon.a

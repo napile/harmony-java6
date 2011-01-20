@@ -48,6 +48,8 @@ hyport_init_library (struct HyPortLibrary *portLibrary,
   /* return value of 0 is success */
   I_32 rc;
 
+  printf("PMQ - hyport_init_library#1\n");
+
 #if defined(ZOS)
   /* Initialise the ascii2ebcdic functions if it has not already been done */
   rc = iconv_init();
@@ -56,18 +58,22 @@ hyport_init_library (struct HyPortLibrary *portLibrary,
 #endif
   {
   rc = hyport_create_library (portLibrary, version, size);
+  printf("PMQ - hyport_init_library#2 rc=%i\n", rc);
   }
   
   if (rc == 0)
     {
       rc = hyport_startup_library (portLibrary);
+      printf("PMQ - hyport_init_library#3 rc=%i\n", rc);
     }
 
   if (rc == 0)
     {
       // try and initialise the nls data before any nls_* calls
       initNLSCatalog(portLibrary);
+      printf("PMQ - hyport_init_library#3 rc=%i\n", rc);
     }
+  printf("PMQ - hyport_init_library#4 rc=%i\n", rc);
   return rc;
 }
 
@@ -146,18 +152,23 @@ hyport_create_library (struct HyPortLibrary * portLibrary,
 
   if (HYPORT_MAJOR_VERSION_NUMBER != version->majorVersionNumber)
     {
+      printf("PMQ - hyport_create_library#1 (HYPORT_MAJOR_VERSION_NUMBER != version->majorVersionNumber)\n");
       return -1;
     }
 
+  /*
   if (versionSize > size)
     {
+      printf("PMQ - hyport_create_library#2 (%i > %i)\n", versionSize, size);
       return -1;
     }
+  */
 
   /* Ensure required functionality is there */
   if ((version->capabilities & HYPORT_CAPABILITY_MASK) !=
       version->capabilities)
     {
+      printf("PMQ - hyport_create_library#3 (capabilities)\n");
       return -1;
     }
 
@@ -170,6 +181,7 @@ hyport_create_library (struct HyPortLibrary * portLibrary,
   portLibrary->portVersion.minorVersionNumber = version->minorVersionNumber;
   portLibrary->portVersion.capabilities = HYPORT_CAPABILITY_MASK;
 
+  printf("PMQ - hyport_create_library#4\n");
   return 0;
 }
 

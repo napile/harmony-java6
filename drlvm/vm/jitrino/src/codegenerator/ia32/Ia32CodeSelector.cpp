@@ -493,7 +493,7 @@ edgeProfile(NULL)
 }
 
 
-void MethodCodeSelector::genCFG(U_32 numNodes, CFGCodeSelector& codeSelector, 
+void MethodCodeSelector::genCFG(U_32 numNodes, ::Jitrino::CFGCodeSelector& codeSelector, 
                                    bool useEdgeProfile) 
 {
     ControlFlowGraph* fg = irManager.getFlowGraph();

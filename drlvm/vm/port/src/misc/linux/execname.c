@@ -25,7 +25,7 @@
 #include <errno.h>
 #include "port_malloc.h"
 #include "port_sysinfo.h"
-#if defined(FREEBSD)
+#if defined(FREEBSD) || defined(MACOSX)
 #define _GNU_SOURCE
 #include <dlfcn.h>
 extern int main (int argc, char **argv, char **envp);
@@ -35,7 +35,7 @@ APR_DECLARE(apr_status_t) port_executable_name(char** self_name) {
 
     char* buf;
 
-#if defined(FREEBSD)
+#if defined(FREEBSD) || defined(MACOSX)
     Dl_info info;
 
     if (dladdr( (const void*)&main, &info) == 0) {

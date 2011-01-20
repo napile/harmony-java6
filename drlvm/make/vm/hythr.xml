@@ -51,14 +51,18 @@
         <linker id="linker" extends="common.linker">
             <libset libs="port,apr-1"
                     dir="${drlvm.lib.dir}" />
+            <libset libs="stdc++,pthread" if="is.macosx"/>
 
             <linkerarg value="/DEF:${vm.home}/thread/src/hythr.def" if="is.windows"/>
 
             <syslibset type="shared" libs="stdc++,rt,pthread" if="is.linux"/>
             <syslibset type="shared" libs="stdc++,pthread" if="is.freebsd"/>
+
             <linkerarg value="-Wl,-init" if="is.unix"/>
-            <linkerarg value="-Wl,hythread_library_init" if="is.unix"/>
-            <linkerarg value="-Wl,--version-script,${vm.home}/thread/src/hythr${hy.thr.ver}.exp" if="is.unix"/>
+            <linkerarg value="-Wl,hythread_library_init" if="is.unix" unless="is.macosx"/>
+            <linkerarg value="-Wl,_hythread_library_init" if="is.macosx"/>
+            <linkerarg value="-Wl,--version-script,${vm.home}/thread/src/hythr${hy.thr.ver}.exp"
+                       if="is.unix" unless="is.macosx"/>
         </linker>
         </make-native>
     </target>

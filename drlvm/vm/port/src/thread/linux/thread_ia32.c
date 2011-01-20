@@ -80,6 +80,35 @@ void port_thread_regs_to_context(ucontext_t *uc, Registers* regs)
     uc->uc_mcontext.mc_eflags = regs->eflags;
 }
 
+#elif defined(__APPLE__)
+void port_thread_context_to_regs(Registers* regs, ucontext_t *uc)
+{
+    regs->eax = uc->uc_mcontext->__ss.__eax;
+    regs->ecx = uc->uc_mcontext->__ss.__ecx;
+    regs->edx = uc->uc_mcontext->__ss.__edx;
+    regs->edi = uc->uc_mcontext->__ss.__edi;
+    regs->esi = uc->uc_mcontext->__ss.__esi;
+    regs->ebx = uc->uc_mcontext->__ss.__ebx;
+    regs->ebp = uc->uc_mcontext->__ss.__ebp;
+    regs->eip = uc->uc_mcontext->__ss.__eip;
+    regs->esp = uc->uc_mcontext->__ss.__esp;
+    regs->eflags = uc->uc_mcontext->__ss.__eflags;
+}
+
+void port_thread_regs_to_context(ucontext_t *uc, Registers* regs)
+{
+    uc->uc_mcontext->__ss.__eax = regs->eax;
+    uc->uc_mcontext->__ss.__ecx = regs->ecx;
+    uc->uc_mcontext->__ss.__edx = regs->edx;
+    uc->uc_mcontext->__ss.__edi = regs->edi;
+    uc->uc_mcontext->__ss.__esi = regs->esi;
+    uc->uc_mcontext->__ss.__ebx = regs->ebx;
+    uc->uc_mcontext->__ss.__ebp = regs->ebp;
+    uc->uc_mcontext->__ss.__eip = regs->eip;
+    uc->uc_mcontext->__ss.__esp = regs->esp;
+    uc->uc_mcontext->__ss.__eflags = regs->eflags;
+}
+
 #else
 #error need to add correct mcontext_t lookup for registers
 #endif

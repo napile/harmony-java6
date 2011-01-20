@@ -18,6 +18,12 @@
 #define _VM_CLASS_INFO_H
 
 #include "open/types.h"
+
+#if defined(MACOSX)
+#include <stdbool.h>
+#define BOOLEAN bool
+#endif
+
 /**
  * @file
  * Part of Class Support interface related to inquiring class data.

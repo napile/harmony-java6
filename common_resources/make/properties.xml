@@ -407,6 +407,7 @@ HY_LOCAL_ZLIB=${hy.local.zlib}
 HY_SHLIB_SUFFIX=${shlib.suffix}
 HY_LINKLIB_SUFFIX=${linklib.suffix}
             </echo>                
+	    <!-- <echo>PMQ: HY_PLATFORM=${hy.platform}</echo> -->
             <exec failonerror="true"
                   executable="${make.command}"
                   dir="@{dir}">

@@ -21,6 +21,11 @@
 #include "open/common.h"
 #include "open/platform_types.h"
 
+#if defined(MACOSX)
+#include <stdbool.h>
+#define BOOLEAN bool
+#endif
+
 
 #ifdef __cplusplus
 extern "C" {

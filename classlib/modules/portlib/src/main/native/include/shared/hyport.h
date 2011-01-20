@@ -32,6 +32,10 @@
 #if (defined(LINUX) || defined(DECUNIX))
 #include <unistd.h>
 #endif
+#if defined(MACOSX)
+#include <stdbool.h>
+#define BOOLEAN bool
+#endif
 
 struct HyPortLibrary;
 /**

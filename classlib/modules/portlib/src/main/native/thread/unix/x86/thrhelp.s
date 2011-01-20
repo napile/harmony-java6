@@ -33,16 +33,16 @@ eqSS_hythread_monitor_unpin = 64
        	#CODE32 ends
        	#CODE32 SEGMENT FLAT PUBLIC 'CODE'
        	#assume cs:flat,ds:flat,ss:flat
-        .globl hythread_monitor_pin
-        .type hythread_monitor_pin,@function
-        .globl current_stack_depth
-        .type current_stack_depth,@function
-        .globl hythread_monitor_unpin
-        .type hythread_monitor_unpin,@function
+        .globl _hythread_monitor_pin
+//        .type hythread_monitor_pin,@function
+        .globl _current_stack_depth
+//        .type current_stack_depth,@function
+        .globl _hythread_monitor_unpin
+//        .type hythread_monitor_unpin,@function
 
         .text
         .align 4
-current_stack_depth:
+_current_stack_depth:
         push %ebp
         mov %esp, %ebp
         push %esi
@@ -67,14 +67,14 @@ current_stack_depth:
         pop %ebp
         ret
 END_current_stack_depth:
-        .size current_stack_depth,END_current_stack_depth - current_stack_depth
+//        .size current_stack_depth,END_current_stack_depth - current_stack_depth
 
 ## Prototype: void hythread_monitor_pin( hythread_monitor_t monitor, hythread_t osThread);
 ## Defined in: #THREAD Args: 2
 
         .text
         .align 4
-hythread_monitor_pin:
+_hythread_monitor_pin:
         push %ebp
         mov %esp, %ebp
         push %esi
@@ -92,14 +92,14 @@ hythread_monitor_pin:
         pop %ebp
         ret
 END_hythread_monitor_pin:
-        .size hythread_monitor_pin,END_hythread_monitor_pin - hythread_monitor_pin
+//        .size hythread_monitor_pin,END_hythread_monitor_pin - hythread_monitor_pin
 
 ## Prototype: void hythread_monitor_unpin( hythread_monitor_t monitor, hythread_t osThread);
 ## Defined in: #THREAD Args: 2
 
         .text
         .align 4
-hythread_monitor_unpin:
+_hythread_monitor_unpin:
         push %ebp
         mov %esp, %ebp
         push %esi
@@ -117,7 +117,7 @@ hythread_monitor_unpin:
         pop %ebp
         ret
 END_hythread_monitor_unpin:
-        .size hythread_monitor_unpin,END_hythread_monitor_unpin - hythread_monitor_unpin
+//        .size hythread_monitor_unpin,END_hythread_monitor_unpin - hythread_monitor_unpin
 
        	#CODE32 ends
         # end of file

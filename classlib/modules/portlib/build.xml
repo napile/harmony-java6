@@ -52,7 +52,7 @@
     <target name="-test-module"
             depends="-make-report-dir,-compile-native-tests,
                      -run-native-tests" />
-    <target name="check-depends" unless="skip.native.build"
+    <target name="check-depends"
         depends="-copy-thread-include,-copy-thread-stub-include,
                  -copy-ascii-ebcdic-include" >
         <copy todir="${hy.hdk}/include" preservelastmodified="true">

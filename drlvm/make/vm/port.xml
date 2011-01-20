@@ -51,6 +51,8 @@
             <include name="vmem/win/*.c" if="is.windows"/>
             <include name="file_io/*.c"/>
 
+            <include name="misc/macosx/*.c" if="is.macosx"/>
+
             <include name="thread/linux/port_thread_tls_find.c" if="is.unix"/>
             <include name="thread/linux/thread_os.c" if="is.unix"/>
             <include name="thread/linux/*ia32.c" if="is.unix.x86"/>

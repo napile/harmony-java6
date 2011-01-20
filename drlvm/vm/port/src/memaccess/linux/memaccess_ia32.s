@@ -25,9 +25,9 @@
 // 4th arg (EBP + 20) - address of restart_address storage
 // 5th arg (EBP + 24) - address of memcpy - not used on x86
 
-.globl port_memcpy_asm
-    .type    port_memcpy_asm, @function
-port_memcpy_asm:
+.globl _port_memcpy_asm
+//    .type    port_memcpy_asm, @function
+_port_memcpy_asm:
     pushl    %ebp
     movl     %esp, %ebp
     subl     $20, %esp
@@ -41,7 +41,7 @@ port_memcpy_asm:
     movl    %eax, 4(%esp)
     movl    16(%ebp), %eax
     movl    %eax, 8(%esp)
-    call    memcpy
+    call    _memcpy
 
 preret:
     addl    $20, %esp

@@ -26,6 +26,11 @@
 #include "open/rt_types.h"
 #include "open/em.h"
 
+#if defined(MACOSX)
+#include <stdbool.h>
+#define BOOLEAN bool
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
