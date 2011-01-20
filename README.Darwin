@@ -1,0 +1,5 @@
+# first failure
+cp target/hdk/jdk/jre/bin/libhythr.dylib target/hdk/lib/
+
+# second failure
+cp ./target/build/classlib/portlib/native/port/libhyprt.dylib target/hdk/jdk/jre/bin/
