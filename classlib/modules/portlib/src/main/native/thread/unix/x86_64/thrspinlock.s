@@ -33,17 +33,15 @@ HYTHREAD_MONITOR_SPINLOCK_UNOWNED = 0
        	#CODE32 ends
        	#CODE32 SEGMENT FLAT PUBLIC 'CODE'
        	#assume cs:flat,ds:flat,ss:flat
-        .globl hythread_yield # an extern
-        .globl hythread_spinlock_acquire
-        .type hythread_spinlock_acquire,@function
-        .globl hythread_spinlock_swapState
-        .type hythread_spinlock_swapState,@function
+        .globl _hythread_yield # an extern
+        .globl _hythread_spinlock_acquire
+        .globl _hythread_spinlock_swapState
 ## Prototype: IDATA hythread_spinlock_acquire(hythread_t self, hythread_monitor_t monitor);
 ## Defined in: #THREAD Args: 2
 
         .text
         .align 8
-hythread_spinlock_acquire:
+_hythread_spinlock_acquire:
         push %rbp
         mov %rsp, %rbp
         push %rsi
@@ -79,7 +77,7 @@ hythread_spinlock_acquire:
         jnz .L3
         mov %rcx, 64(%rsp)                      ## save VMtemp3_1_3_(HyThreadAbstractMonitor->spinCount3)
         mov %rdx, 68(%rsp)                      ## save VMtemp3_1_2_(struct HyThreadAbstractMonitor*) in_HyVMThreadSpinlocks>>#hythread_spinlock_acquire
-        call hythread_yield@PLT
+        call _hythread_yield
         mov 64(%rsp), %rcx                      ## load VMtemp3_1_3_(HyThreadAbstractMonitor->spinCount3)
         dec %rcx                                ## setFlags: true(Converted subtract 1 to dec)
         mov 68(%rsp), %rdx                      ## load VMtemp3_1_2_(struct HyThreadAbstractMonitor*) in_HyVMThreadSpinlocks>>#hythread_spinlock_acquire
@@ -94,14 +92,13 @@ hythread_spinlock_acquire:
         pop %rbp
         ret
 END_hythread_spinlock_acquire:
-        .size hythread_spinlock_acquire,END_hythread_spinlock_acquire - hythread_spinlock_acquire
 
 ## Prototype: UDATA hythread_spinlock_swapState(hythread_monitor_t monitor, UDATA newState);
 ## Defined in: #THREAD Args: 2
 
         .text
         .align 8
-hythread_spinlock_swapState:
+_hythread_spinlock_swapState:
         push %rbp
         mov %rsp, %rbp
         push %rsi
@@ -126,7 +123,6 @@ hythread_spinlock_swapState:
         pop %rbp
         ret
 END_hythread_spinlock_swapState:
-        .size hythread_spinlock_swapState,END_hythread_spinlock_swapState - hythread_spinlock_swapState
 
        	#CODE32 ends
         # end of file

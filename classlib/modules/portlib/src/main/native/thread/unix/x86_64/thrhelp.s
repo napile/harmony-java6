@@ -33,16 +33,13 @@ eqSS_hythread_monitor_unpin = 64
        	#CODE32 ends
        	#CODE32 SEGMENT FLAT PUBLIC 'CODE'
        	#assume cs:flat,ds:flat,ss:flat
-        .globl hythread_monitor_pin
-        .type hythread_monitor_pin,@function
-        .globl current_stack_depth
-        .type current_stack_depth,@function
-        .globl hythread_monitor_unpin
-        .type hythread_monitor_unpin,@function
+        .globl _hythread_monitor_pin
+        .globl _current_stack_depth
+        .globl _hythread_monitor_unpin
 
         .text
         .align 8
-current_stack_depth:
+_current_stack_depth:
         push %rbp
         mov %rsp, %rbp
         push %rsi
@@ -67,14 +64,13 @@ current_stack_depth:
         pop %rbp
         ret
 END_current_stack_depth:
-        .size current_stack_depth,END_current_stack_depth - current_stack_depth
 
 ## Prototype: void hythread_monitor_pin( hythread_monitor_t monitor, hythread_t osThread);
 ## Defined in: #THREAD Args: 2
 
         .text
         .align 8
-hythread_monitor_pin:
+_hythread_monitor_pin:
         push %rbp
         mov %rsp, %rbp
         push %rsi
@@ -92,14 +88,13 @@ hythread_monitor_pin:
         pop %rbp
         ret
 END_hythread_monitor_pin:
-        .size hythread_monitor_pin,END_hythread_monitor_pin - hythread_monitor_pin
 
 ## Prototype: void hythread_monitor_unpin( hythread_monitor_t monitor, hythread_t osThread);
 ## Defined in: #THREAD Args: 2
 
         .text
         .align 8
-hythread_monitor_unpin:
+_hythread_monitor_unpin:
         push %rbp
         mov %rsp, %rbp
         push %rsi
@@ -117,7 +112,6 @@ hythread_monitor_unpin:
         pop %rbp
         ret
 END_hythread_monitor_unpin:
-        .size hythread_monitor_unpin,END_hythread_monitor_unpin - hythread_monitor_unpin
 
        	#CODE32 ends
         # end of file
