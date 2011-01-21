@@ -1,3 +1,9 @@
+# install using MacPorts
+port install jpeg
+port install lcms
+port install libpng
+port install freetype
+
 # first failure
 cp target/hdk/jdk/jre/bin/libhythr.dylib target/hdk/lib/
 
