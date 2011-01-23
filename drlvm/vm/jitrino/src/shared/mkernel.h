@@ -56,7 +56,7 @@
 #endif
 #include <assert.h>
 
-#if defined(FREEBSD)
+#if defined(FREEBSD) || defined(MACOSX)
 #define PTHREAD_MUTEX_RECURSIVE_NP PTHREAD_MUTEX_RECURSIVE
 #endif
 
