@@ -26,6 +26,7 @@
 #endif
 
 #if defined(MACOSX)
+#include "../../misc/macosx/pthread_getattr_np.h"
 #include <crt_externs.h>
 #define environ (*_NSGetEnviron())
 #else
