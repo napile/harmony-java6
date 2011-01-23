@@ -34,9 +34,13 @@ ifneq ($(HY_OS),zos)
   OPT += -fno-exceptions -fno-rtti
   ifneq ($(HY_OS),aix)
     # !AIX and !zOS
-    MDLLIBFILES = $(LIBPATH)libvmi.so
+    ifeq ($(HY_OS),macosx)
+      MDLLIBFILES = $(LIBPATH)libvmi.dylib
+    else
+      MDLLIBFILES = $(LIBPATH)libvmi.so
+    endif
     DLL_LDFLAGS += -fno-exceptions -fno-rtti
-    LDFLAGS += $(STDCLIBS)
+    LDFLAGS += $(STDCLIBS) -lhythr
   else
     # AIX
     MDLLIBFILES =
@@ -52,7 +56,11 @@ ifeq ($(HY_NO_THR),true)
 MDLLIBFILES += $(LIBPATH)libhythr$(HY_LINKLIB_SUFFIX)
 endif
 
+ifeq ($(HY_OS),macosx)
+DLLNAME = $(TOOLSDLLPATH)libdt_socket.dylib
+else
 DLLNAME = $(TOOLSDLLPATH)libdt_socket.so
+endif
 
 STDCLIBS = 
 
