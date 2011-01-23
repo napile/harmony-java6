@@ -81,8 +81,9 @@
 
         <link-lib name="interpreter" type="shared">
             <linker id="linker" extends="common.linker">
-                <linkerarg value="--version-script=${vm.home}/interpreter/build/interpreter.exp" if="is.unix"/>
+                <linkerarg value="--version-script=${vm.home}/interpreter/build/interpreter.exp" if="is.unix" unless="is.macosx"/>
                 <libset libs="harmonyvm,hythr" dir="${drlvm.shlib.dir}" />
+                <libset libs="stdc++" if="is.macosx"/>
             </linker>
         </link-lib>
 
