@@ -132,7 +132,59 @@ static void ncai_registers_to_context(NcaiRegisters* pregs, ucontext_t* pcontext
     pcontext->uc_mcontext.mc_flags  = pregs->eflags;
 }
 
-#else // # defined(FREEBSD)
+#elif defined(MACOSX)
+
+static void ncai_context_to_registers(ucontext_t* pcontext, NcaiRegisters* pregs)
+{
+    pregs->rax  = pcontext->uc_mcontext->__ss.__rax;
+    pregs->rbx  = pcontext->uc_mcontext->__ss.__rbx;
+    pregs->rcx  = pcontext->uc_mcontext->__ss.__rcx;
+    pregs->rdx  = pcontext->uc_mcontext->__ss.__rdx;
+    pregs->rsp  = pcontext->uc_mcontext->__ss.__rsp;
+    pregs->rbp  = pcontext->uc_mcontext->__ss.__rbp;
+    pregs->rsi  = pcontext->uc_mcontext->__ss.__rsi;
+    pregs->rdi  = pcontext->uc_mcontext->__ss.__rdi;
+    pregs->r8   = pcontext->uc_mcontext->__ss.__r8;
+    pregs->r9   = pcontext->uc_mcontext->__ss.__r9;
+    pregs->r10  = pcontext->uc_mcontext->__ss.__r10;
+    pregs->r11  = pcontext->uc_mcontext->__ss.__r11;
+    pregs->r12  = pcontext->uc_mcontext->__ss.__r12;
+    pregs->r13  = pcontext->uc_mcontext->__ss.__r13;
+    pregs->r14  = pcontext->uc_mcontext->__ss.__r14;
+    pregs->r15  = pcontext->uc_mcontext->__ss.__r15;
+    pregs->fs = 0;
+    pregs->gs = 0;
+    pregs->ss = 0;
+    pregs->cs = 0;
+    pregs->rip    = pcontext->uc_mcontext->__ss.__rip;
+    pregs->eflags = pcontext->uc_mcontext->__ss.__rflags;
+}
+
+static void ncai_registers_to_context(NcaiRegisters* pregs, ucontext_t* pcontext)
+{
+    pcontext->uc_mcontext->__ss.__rax  = pregs->rax;
+    pcontext->uc_mcontext->__ss.__rbx  = pregs->rbx;
+    pcontext->uc_mcontext->__ss.__rcx  = pregs->rcx;
+    pcontext->uc_mcontext->__ss.__rdx  = pregs->rdx;
+    pcontext->uc_mcontext->__ss.__rsp  = pregs->rsp;
+    pcontext->uc_mcontext->__ss.__rbp  = pregs->rbp;
+    pcontext->uc_mcontext->__ss.__rsi  = pregs->rsi;
+    pcontext->uc_mcontext->__ss.__rdi  = pregs->rdi;
+    pcontext->uc_mcontext->__ss.__r8   = pregs->r8;
+    pcontext->uc_mcontext->__ss.__r9   = pregs->r9;
+    pcontext->uc_mcontext->__ss.__r10  = pregs->r10;
+    pcontext->uc_mcontext->__ss.__r11  = pregs->r11;
+    pcontext->uc_mcontext->__ss.__r12  = pregs->r12;
+    pcontext->uc_mcontext->__ss.__r13  = pregs->r13;
+    pcontext->uc_mcontext->__ss.__r14  = pregs->r14;
+    pcontext->uc_mcontext->__ss.__r15  = pregs->r15;
+    // cs, gs, fs and ss registers are not restored, because there is
+    // no storage for them
+    pcontext->uc_mcontext->__ss.__rip  = pregs->rip;
+    pcontext->uc_mcontext->__ss.__rflags  = pregs->eflags;
+}
+
+#else // !defined(FREEBSD) && !defined(MACOSX)
 
 #ifdef PLATFORM_POSIX
 
