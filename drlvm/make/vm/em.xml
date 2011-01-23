@@ -46,12 +46,13 @@
         <linker id="linker" extends="common.linker">
             <libset libs="harmonyvm,hythr" dir="${drlvm.shlib.dir}" />
             <libset libs="port,apr-1" dir="${drlvm.lib.dir}" />
+            <libset libs="stdc++" if="is.macosx"/>
             
             <syslibset type="shared" libs="m,dl,stdc++,z,pthread" if="is.linux"/>
             <syslibset type="shared" libs="m,stdc++,z,pthread" if="is.freebsd"/>
             <linkerarg value="--export-dynamic" if="is.freebsd"/>
             
-            <linkerarg value="--version-script=${vm.home}/em/build/em.exp" if="is.unix"/>
+            <linkerarg value="--version-script=${vm.home}/em/build/em.exp" if="is.unix" unless="is.macosx"/>
         </linker>
         </make-native>
     </target>
