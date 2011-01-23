@@ -85,12 +85,26 @@
 
         <property name="hy.asm.compiler" value="${hy.cpp.compiler}"/>
 
-           <condition property="asm.flags" value="-Wa,--fatal-warnings -c -x assembler-with-cpp -g">
-            <or>
-                <equals arg1="icc" arg2="${hy.asm.compiler}" />
-                <equals arg1="gcc" arg2="${hy.asm.compiler}" />
-            </or>
+        <condition property="asm.flags" value="-c -x assembler-with-cpp -g">
+            <and>
+                <or>
+                    <equals arg1="icc" arg2="${hy.asm.compiler}" />
+                    <equals arg1="gcc" arg2="${hy.asm.compiler}" />
+                </or>
+                <isset property="is.macosx"/>
+            </and>
         </condition>
+
+        <condition property="asm.flags" value="-c -x assembler-with-cpp -g">
+            <and>
+                <or>
+                    <equals arg1="icc" arg2="${hy.asm.compiler}" />
+                    <equals arg1="gcc" arg2="${hy.asm.compiler}" />
+                </or>
+                <isset property="is.unix"/>
+            </and>
+        </condition>
+
         <condition property="asm.obj.switch" value="-o">
             <or>
                 <equals arg1="${hy.cpp.compiler}" arg2="gcc"/>
