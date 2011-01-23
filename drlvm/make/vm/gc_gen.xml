@@ -104,9 +104,12 @@
 
         <linker id="linker" extends="common.linker">
             <libset libs="harmonyvm" dir="${drlvm.lib.dir}" if="is.windows"/>
+            <libset libs="harmonyvm" dir="${drlvm.shlib.dir}" if="is.macosx"/>
+            <libset libs="apr-1" dir="${drlvm.lib.dir}" if="is.macosx"/>
+            <libset libs="stdc++" if="is.macosx"/>
             <libset libs="hythr" dir="${drlvm.shlib.dir}" />
-            <linkerarg value="-Bsymbolic" if="is.unix"/>
-            <linkerarg value="--version-script=${vm.home}/gc_gen/build/gc_gen.exp" if="is.unix"/>
+            <linkerarg value="-Bsymbolic" if="is.unix" unless="is.macosx"/>
+            <linkerarg value="--version-script=${vm.home}/gc_gen/build/gc_gen.exp" if="is.unix" unless="is.macosx"/>
         </linker>
 
     </target>
