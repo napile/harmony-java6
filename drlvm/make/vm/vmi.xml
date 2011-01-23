@@ -44,11 +44,13 @@
                 <linkerarg value="/export:VMI_GetVMIFromJavaVM" if="is.windows"/>
                 <linkerarg value="/export:VMI_GetVMIFromJNIEnv" if="is.windows"/>
                 <libset libs="harmonyvm" dir="${drlvm.lib.dir}" if="is.windows"/>
+                <libset libs="harmonyvm" dir="${drlvm.shlib.dir}" if="is.macosx"/>
 
-                <linkerarg value="--version-script,${vm.home}/vmi/src/vmi.exp" if="is.unix"/>
+                <linkerarg value="--version-script,${vm.home}/vmi/src/vmi.exp" if="is.unix" unless="is.macosx"/>
 
                 <libset libs="hyzip, hypool" dir="${hy.hdk}/lib"/>
                 <libset libs="hyprt" dir="${hy.hdk.shlibs}"/>
+                <libset libs="stdc++" if="is.macosx"/>
             </linker>
         </make-native>
     </target>
