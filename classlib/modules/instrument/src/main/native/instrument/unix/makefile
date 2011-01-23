@@ -32,6 +32,12 @@ endif
 
 MDLLIBFILES += $(LIBPATH)libvmi$(HY_LINKLIB_SUFFIX)
 
+## FIXME PMQ the test doesn't work
+# ifeq ($(HY_OS),macosx)
+# on Mac OS X, override -fno-common
+PLATFORM = -fPIC
+# endif
+
 DLLNAME = $(DLLPATH)libhyinstrument$(HY_SHLIB_SUFFIX)
 EXPNAME = HYINSTRUMENT_0.1
 
