@@ -57,8 +57,9 @@
             <syslibset type="shared" libs="stdc++,rt,pthread" if="is.linux"/>
             <syslibset type="shared" libs="stdc++,pthread" if="is.freebsd"/>
             <linkerarg value="-Wl,-init" if="is.unix"/>
-            <linkerarg value="-Wl,hythread_library_init" if="is.unix"/>
-            <linkerarg value="-Wl,--version-script,${vm.home}/thread/src/hythr${hy.thr.ver}.exp" if="is.unix"/>
+            <linkerarg value="-Wl,hythread_library_init" if="is.unix" unless="is.macosx"/>
+            <linkerarg value="-Wl,_hythread_library_init" if="is.macosx"/>
+            <linkerarg value="-Wl,--version-script,${vm.home}/thread/src/hythr${hy.thr.ver}.exp" if="is.unix" unless="is.macosx"/>
         </linker>
         </make-native>
     </target>
