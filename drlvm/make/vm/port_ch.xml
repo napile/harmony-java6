@@ -129,13 +129,20 @@
         <link-lib name="ch" type="shared">
             <linker id="linker" extends="common.linker">
                 <libset libs="encoder" dir="${drlvm.lib.dir}" />
+                 <!-- on Mac, link with port for compat tricks like clock_gettime -->
+                 <libset libs="stdc++,pthread,port" if="is.macosx"/>
 
-                <linkerarg value="--version-script=${vm.home}/port/build/ch.exp" if="is.unix"/>
+                <linkerarg value="--version-script=${vm.home}/port/build/ch.exp" if="is.unix" unless="is.macosx"/>
 
                 <syslibset type="shared" libs="user32" if="is.windows"/>
                 <syslibset type="shared" libs="dl,stdc++,pthread,rt" if="is.linux"/>
                 <syslibset type="shared" libs="stdc++,pthread" if="is.freebsd"/>
                 <linkerarg value="--export-dynamic" if="is.freebsd"/>
+
+                <!-- <linkerarg value="-read_only_relocs,suppress" if="is.macosx"/> -->
+                <!-- FIXME PMQ for pthread_attr_np in port -->
+                <linkerarg value="-undefined" if="is.macosx"/>
+                <linkerarg value="dynamic_lookup" if="is.macosx"/>
             </linker>
         </link-lib>
     </target>
