@@ -174,7 +174,7 @@ void* alloc_large_pages(size_t size, const char* hint){
   }
   return alloc_addr;
 }
-#elif defined(FREEBSD)
+#elif defined(FREEBSD) || defined(MACOSX)
 void* mmap_large_pages(size_t size, const char* path)
 {
   return NULL;
