@@ -497,6 +497,10 @@ typedef struct HyThread_public {
 #   define APR_TLS_USE
 #   define HYTHREAD_FAST_TLS_ATTRIBUTE   
 #   undef HYTHREAD_FAST_TLS
+#elif defined(MACOSX)
+#   define APR_TLS_USE
+#   define HYTHREAD_FAST_TLS_ATTRIBUTE
+#   undef HYTHREAD_FAST_TLS
 #else
 #   undef HYTHREAD_FAST_TLS
 #endif
