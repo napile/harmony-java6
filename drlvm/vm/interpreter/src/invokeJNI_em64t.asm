@@ -17,9 +17,8 @@
 //
     .text
     .align 2
-.globl invokeJNI
-    .type    invokeJNI, @function
-invokeJNI:
+.globl _invokeJNI
+_invokeJNI:
 //  rdi - memory
 //  rsi - n fp args
 //  rdx - n mem args
@@ -40,9 +39,9 @@ invokeJNI:
 
     mov %rsp, %r10 // Check that stack is aligned on
     and $8, %r10   // 16 bytes. This code may be removed
-    jz no_abort    // when we are sure that compiler always
+    jz _no_abort    // when we are sure that compiler always
     int3           // calls us with aligned stack
-no_abort:
+_no_abort:
     mov %rdx, %r10 // Align stack on 16 bytes before pushing
     and $1, %r10   // stack arguments in case we have an odd
     shl $3, %r10   // number of stack arguments
@@ -53,11 +52,11 @@ no_abort:
     lea 8+64+48-8(%rdi,%rcx,8), %rdx
     sub %rsp, %rdx
     cmpq $0, %rcx
-    jz cycle_end
-cycle:
+    jz _cycle_end
+_cycle:
     push 0(%rsp,%rdx)
-    loop cycle
-cycle_end:
+    loop _cycle
+_cycle_end:
     movq 80(%rdi), %rsi
     movq 88(%rdi), %rdx
     movq 96(%rdi), %rcx
