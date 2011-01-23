@@ -32,6 +32,9 @@
 #if defined(FREEBSD)
 #define STACK_MMAP_ATTRS \
     (MAP_FIXED | MAP_PRIVATE | MAP_ANON | MAP_STACK)
+#elif defined(MACOSX)
+#define STACK_MMAP_ATTRS \
+    (MAP_FIXED | MAP_PRIVATE | MAP_ANON)
 #else
 #ifdef _IPF_
 #define STACK_MMAP_ATTRS \
@@ -48,6 +51,9 @@
 #define STACK_MAPPING_ACCESS (PROT_READ | PROT_WRITE | PROT_EXEC)
 #endif /* _IPF_ */
 
+#if defined(MACOSX)
+#include "../../misc/macosx/clock_gettime.h"
+#endif /* MACOSX */
 
 /* Forward declarations */
 static int suspend_init();
@@ -510,7 +516,7 @@ int port_thread_detach()
 
 int port_thread_set_priority(osthread_t os_thread, int priority)
 {
-#if defined(FREEBSD)
+#if defined(FREEBSD) || defined(MACOSX)
     /* Not sure why we don't just use this on linux? - MRH */
     struct sched_param param;
     int policy;
@@ -595,6 +601,8 @@ int port_get_thread_times(osthread_t os_thread, int64* pkernel, int64* puser)
     struct timespec tp;
     int r;
 #ifdef FREEBSD
+    return EINVAL; /* TOFIX: Implement */
+#elif defined(MACOSX)
     return EINVAL; /* TOFIX: Implement */
 #else
 

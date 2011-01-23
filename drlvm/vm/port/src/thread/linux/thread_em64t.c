@@ -66,6 +66,52 @@ void port_thread_regs_to_context(ucontext_t *uc, Registers* regs)
     uc->uc_mcontext.mc_flags = regs->eflags;
 }
 
+#elif defined(__APPLE__)
+
+void port_thread_context_to_regs(Registers* regs, ucontext_t *uc)
+{
+    regs->rax = uc->uc_mcontext->__ss.__rax;
+    regs->rcx = uc->uc_mcontext->__ss.__rcx;
+    regs->rdx = uc->uc_mcontext->__ss.__rdx;
+    regs->rdi = uc->uc_mcontext->__ss.__rdi;
+    regs->rsi = uc->uc_mcontext->__ss.__rsi;
+    regs->rbx = uc->uc_mcontext->__ss.__rbx;
+    regs->rbp = uc->uc_mcontext->__ss.__rbp;
+    regs->rip = uc->uc_mcontext->__ss.__rip;
+    regs->rsp = uc->uc_mcontext->__ss.__rsp;
+    regs->r8  = uc->uc_mcontext->__ss.__r8;
+    regs->r9  = uc->uc_mcontext->__ss.__r9;
+    regs->r10 = uc->uc_mcontext->__ss.__r10;
+    regs->r11 = uc->uc_mcontext->__ss.__r11;
+    regs->r12 = uc->uc_mcontext->__ss.__r12;
+    regs->r13 = uc->uc_mcontext->__ss.__r13;
+    regs->r14 = uc->uc_mcontext->__ss.__r14;
+    regs->r15 = uc->uc_mcontext->__ss.__r15;
+    regs->eflags = uc->uc_mcontext->__ss.__rflags;
+}
+
+void port_thread_regs_to_context(ucontext_t *uc, Registers* regs)
+{
+    uc->uc_mcontext->__ss.__rax = regs->rax;
+    uc->uc_mcontext->__ss.__rcx = regs->rcx;
+    uc->uc_mcontext->__ss.__rdx = regs->rdx;
+    uc->uc_mcontext->__ss.__rdi = regs->rdi;
+    uc->uc_mcontext->__ss.__rsi = regs->rsi;
+    uc->uc_mcontext->__ss.__rbx = regs->rbx;
+    uc->uc_mcontext->__ss.__rbp = regs->rbp;
+    uc->uc_mcontext->__ss.__rip = regs->rip;
+    uc->uc_mcontext->__ss.__rsp = regs->rsp;
+    uc->uc_mcontext->__ss.__r8  = regs->r8;
+    uc->uc_mcontext->__ss.__r9  = regs->r9;
+    uc->uc_mcontext->__ss.__r10 = regs->r10;
+    uc->uc_mcontext->__ss.__r11 = regs->r11;
+    uc->uc_mcontext->__ss.__r12 = regs->r12;
+    uc->uc_mcontext->__ss.__r13 = regs->r13;
+    uc->uc_mcontext->__ss.__r14 = regs->r14;
+    uc->uc_mcontext->__ss.__r15 = regs->r15;
+    uc->uc_mcontext->__ss.__rflags = regs->eflags;
+}
+
 #else
 
 void port_thread_context_to_regs(Registers* regs, ucontext_t *uc)
