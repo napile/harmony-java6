@@ -142,7 +142,7 @@ APR_DECLARE(size_t) port_vmem_reserved_size(){
     return port_vmem_committed_size();
 }
 
-#ifdef FREEBSD
+#if defined(FREEBSD) || defined(MACOSX)
 APR_DECLARE(size_t) port_vmem_committed_size(){
     return 0; /* TOFIX: Implement */
 }
