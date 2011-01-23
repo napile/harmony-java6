@@ -15,7 +15,6 @@
 //  limitations under the License.
 //
     .text
-	.align 16
 
 // port_memcpy_asm(void* dst, const void* src, size_t size,
 //                 void** prestart_addr, void* memcpyaddr);
@@ -25,18 +24,18 @@
 // 4th arg (RCX) - address of restart_address storage
 // 5th arg (R8)  - address of memcpy - to avoid PIC problems in GNU asm
 
-.globl port_memcpy_asm
-    .type    port_memcpy_asm, @function
-port_memcpy_asm:
+.globl _port_memcpy_asm
+_port_memcpy_asm:
     pushq   %rbx
-    callq   precall
-precall:
+    callq   _precall
+_precall:
     popq    %rax
-    addq    $(preret - precall), %rax
+    addq    _preret(%rip), %rax
+    subq    _precall(%rip), %rax
     movq    %rax, (%rcx)
 
     callq   *%r8
 
-preret:
+_preret:
     popq    %rbx
     ret

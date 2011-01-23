@@ -15,7 +15,6 @@
 // limitations under the License.
 
 	.text
-	.align 16
 
 // struct Registers {
 // uint64 rsp;   ; 00h
@@ -43,9 +42,8 @@
 //
 // void port_transfer_to_regs_asm(Registers* regs)
 
-.globl port_transfer_to_regs_asm
-       .type   port_transfer_to_regs_asm, @function
-port_transfer_to_regs_asm:
+.globl _port_transfer_to_regs_asm
+_port_transfer_to_regs_asm:
     movq    %rdi, %rdx // regs pointer (1st param - RDI) -> RDX
 
     movq    0x08(%rdx), %rbp // RBP field
@@ -111,10 +109,9 @@ __skipefl__:
 // |  from 'fn'  | <- address to return to the port_longjump_stub
 // |-------------|
 
-.globl port_longjump_stub
-	.type	port_longjump_stub, @function
-port_longjump_stub:
+.globl _port_longjump_stub
+_port_longjump_stub:
 //    movq    128(%rsp), %rdi // load RDI with the address of saved Registers
     movq    (%rsp), %rdi // load RDI with the address of saved Registers
-    callq   port_transfer_to_regs_asm // restore context
+    callq   _port_transfer_to_regs_asm // restore context
     ret                             // dummy RET - unreachable
