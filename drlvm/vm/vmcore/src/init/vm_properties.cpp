@@ -29,7 +29,7 @@
 #include "init.h"
 #include "port_modules.h"
 #include "version.h"
-#if defined(FREEBSD)
+#if defined(FREEBSD) || defined(MACOSX)
 #include <dlfcn.h>
 #endif
 
@@ -109,7 +109,7 @@ static char* get_module_filename(void* code_ptr)
     void **ptr = (void**)code_ptr;
     code_ptr = ptr[0];
 #endif
-#if defined(FREEBSD)
+#if defined(FREEBSD) || defined(MACOSX)
     Dl_info info;
     if (dladdr( (const void*)code_ptr, &info) == 0) {
         return NULL;
