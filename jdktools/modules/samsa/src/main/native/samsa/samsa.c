@@ -37,7 +37,7 @@
 #include <unistd.h>
 #endif
 
-#if defined(FREEBSD)
+#if defined(FREEBSD) || defined(MACOSX)
 #include <dlfcn.h>
 #endif
 
@@ -97,7 +97,7 @@ char     *getRoot(const char*);
 TOOLDATA *getToolData(const char *, const char *, int toolType);
 int getToolType(const char*, const char*);
 char* jarFile(const char*, const char*);
-#if !defined(LINUX) && !defined(FREEBSD) && !defined(WIN32)
+#if !defined(LINUX) && !defined(FREEBSD) && !defined(MACOSX) && !defined(WIN32)
 char* findInPath(const char* basename);
 #endif
 
@@ -479,7 +479,7 @@ char *getExeDir(const char* argv0) {
     int size = readlink ("/proc/self/exe", buffer, sizeof(buffer)-2);
     
     buffer[size+1] = '\0';
-#elif defined(FREEBSD)
+#elif defined(FREEBSD) || defined(MACOSX)
     Dl_info info;
     char buffer[PATH_MAX + 1];
     if (dladdr( (const void*)&main, &info) == 0) {
@@ -721,7 +721,7 @@ char* jarFile(const char* path, const char* jarName) {
     return jarPath;
 }
 
-#if !defined(LINUX) && !defined(FREEBSD) && !defined(WIN32)
+#if !defined(LINUX) && !defined(FREEBSD) && !defined(MACOSX) && !defined(WIN32)
 char* findInPath(const char* basename)
 {
   char filename[PATH_MAX+1];
