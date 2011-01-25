@@ -27,6 +27,6 @@ MDLLIBPREFIX =
 MDLLIBSUFFIX =
 EXERPATHPREFIX = 
 DLL_LD = $(CC)
-DLL_LDFLAGS = -dynamiclib -dynamic -install_name $(@F)
+DLL_LDFLAGS = -dynamiclib -dynamic -flat_namespace -undefined suppress -install_name $(@F)
 
 RANLIB=ranlib

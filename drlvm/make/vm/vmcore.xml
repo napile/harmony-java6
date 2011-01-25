@@ -200,6 +200,9 @@
                 <syslibset type="shared" libs="m,dl,stdc++,pthread,gcc_s,rt" if="is.linux"/>
                 <syslibset type="shared" libs="m,stdc++,pthread" if="is.freebsd"/> 
                 <linkerarg value="--export-dynamic" if="is.freebsd"/>
+                <linkerarg value="-flat_namespace" if="is.macosx"/>
+                <linkerarg value="-undefined" if="is.macosx"/>
+                <linkerarg value="suppress" if="is.macosx"/>
             </linker>
         </link-lib>        
         

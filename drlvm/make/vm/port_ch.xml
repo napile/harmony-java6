@@ -138,11 +138,10 @@
                 <syslibset type="shared" libs="dl,stdc++,pthread,rt" if="is.linux"/>
                 <syslibset type="shared" libs="stdc++,pthread" if="is.freebsd"/>
                 <linkerarg value="--export-dynamic" if="is.freebsd"/>
-
                 <!-- <linkerarg value="-read_only_relocs,suppress" if="is.macosx"/> -->
-                <!-- FIXME PMQ for pthread_attr_np in port -->
+                <linkerarg value="-flat_namespace" if="is.macosx"/>
                 <linkerarg value="-undefined" if="is.macosx"/>
-                <linkerarg value="dynamic_lookup" if="is.macosx"/>
+                <linkerarg value="suppress" if="is.macosx"/>
             </linker>
         </link-lib>
     </target>
