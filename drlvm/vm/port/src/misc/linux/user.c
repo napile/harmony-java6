@@ -31,9 +31,11 @@ APR_DECLARE(apr_status_t) port_user_name(char** account,
 	struct passwd *user_info;
 	errno = 0;
 	user_info = getpwuid(getuid());
+#if !defined(MACOSX) /* on Mac OS X, getpwuid sets errno=2 */
 	if (errno != 0) {
 		return apr_get_os_error();
 	}
+#endif
 	*account = apr_pstrdup(pool, user_info->pw_name);
 	return APR_SUCCESS;
 }
@@ -44,9 +46,11 @@ APR_DECLARE(apr_status_t) port_user_home(char** path,
 	struct passwd *user_info;
 	errno = 0;
 	user_info = getpwuid(getuid());
+#if !defined(MACOSX) /* on Mac OS X, getpwuid sets errno=2 */
 	if (errno != 0) {
 		return apr_get_os_error();
 	}
+#endif
 	*path = apr_pstrdup(pool, user_info->pw_dir);
 	return APR_SUCCESS;
 }
