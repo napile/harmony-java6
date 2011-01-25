@@ -339,7 +339,7 @@ hysysinfo_get_executable_name (struct HyPortLibrary * portLibrary,
 #if defined(LINUX)
   return readSymbolicLink (portLibrary, "/proc/self/exe", result);
 #else
-#if defined(FREEBSD)
+#if defined(FREEBSD) || defined(MACOSX)
   extern int main (int argc, char **argv, char **envp);
   Dl_info info;
   if (dladdr( (const void*)&main, &info) == 0) {
