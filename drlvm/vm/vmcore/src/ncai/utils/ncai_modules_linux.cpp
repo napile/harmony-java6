@@ -30,7 +30,11 @@ char* ncai_parse_module_name(char* filepath)
     size_t length = 0;
     char* filename = strrchr(filepath, '/');
     filename = filename ? (filename + 1) : filepath;
+#if defined(MACOSX)
+    char* dot_so = strstr(filename, ".dylib");
+#else
     char* dot_so = strstr(filename, ".so");
+#endif
 
     if (dot_so != NULL) // We have shared library, cut off 'lib' too
     {

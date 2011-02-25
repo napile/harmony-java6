@@ -69,8 +69,8 @@ APR_DECLARE(char *) port_dso_name_decorate(const char* dl_name,
 		return 0;
 	}
         if (dl_ver) {
-                return apr_pstrcat(pool, "lib", dl_name, ".so.", dl_ver, NULL);
+                return apr_pstrcat(pool, "lib", dl_name, PORT_DSO_EXT, ".", dl_ver, NULL);
         } else {
-                return apr_pstrcat(pool, "lib", dl_name, ".so", NULL);
+                return apr_pstrcat(pool, "lib", dl_name, PORT_DSO_EXT, NULL);
         }
 }

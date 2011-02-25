@@ -49,7 +49,10 @@ extern "C" {
 #define PORT_DSO_NAME(name)
 #endif
 
-#ifdef PLATFORM_POSIX
+#ifdef MACOSX
+#   define PORT_DSO_PREFIX "lib"
+#   define PORT_DSO_EXT ".dylib"
+#elif PLATFORM_POSIX
 #   define PORT_DSO_PREFIX "lib"
 #   define PORT_DSO_EXT ".so"
 #elif PLATFORM_NT

@@ -190,6 +190,8 @@ static bool endsWith(const std::string& str, const std::string& suffix) {
 std::string prepareLibPath(const std::string& origPath) {
 #ifdef PLATFORM_NT
     std::string separator("\\"), libPrefix(""), libSuffix(".dll");
+#elif MACOSX
+    std::string separator("/"), libPrefix("lib"), libSuffix(".dylib");
 #else
     std::string separator("/"), libPrefix("lib"), libSuffix(".so");
 #endif

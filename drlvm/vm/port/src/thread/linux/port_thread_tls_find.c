@@ -19,7 +19,11 @@
 #include "port_thread_internal.h"
 
 
+#if defined(MACOSX)
+#define SHPORT_SH_NAME ("lib" CH_SHLIB_NAME ".dylib")
+#else
 #define SHPORT_SH_NAME ("lib" CH_SHLIB_NAME ".so")
+#endif
 
 volatile port_shared_data_t* port_shared_data = NULL;
 
