@@ -338,6 +338,9 @@ static int setup_stack(port_tls_data_t* tlsdata)
 //    mapping_size = tlsdata->stack_size
 //            - ((size_t)tlsdata->stack_addr - mapping_addr);
 
+    printf("PMQ - setup_stack - (&res - mem_protect_size) = %zu \n", (size_t)(&res) - PSD->mem_protect_size);
+    printf("PMQ - setup_stack - (guard_page_addr + guard_page_size) = %zu \n", (size_t)tlsdata->guard_page_addr + tlsdata->guard_page_size);
+
     if ((size_t)(&res) - PSD->mem_protect_size
             < (size_t)tlsdata->guard_page_addr + tlsdata->guard_page_size)
         return EINVAL;
@@ -371,20 +374,30 @@ inline int find_stack_addr_size(void** paddr, size_t* psize)
 
     if (!paddr) return EINVAL;
 
+#if !defined(MACOSX)
     err = pthread_attr_init(&pthread_attr);
     if (err != 0) return err;
+#endif
 
 #if defined(FREEBSD)
     err = pthread_attr_get_np(thread, &pthread_attr);
+#elif defined(MACOSX)
+    stack_addr = pthread_get_stackaddr_np(thread);
+    stack_size = pthread_get_stacksize_np(thread);
+    err = 0;
 #else
     err = pthread_getattr_np(thread, &pthread_attr);
 #endif
+
     if (err != 0) return err;
 
+#if !defined(MACOSX)
     err = pthread_attr_getstack(&pthread_attr, &stack_addr, &stack_size);
     if (err != 0) return err;
 
     pthread_attr_destroy(&pthread_attr);
+#endif
+
     *paddr = (void*)((size_t)stack_addr + stack_size);
     *psize = stack_size;
     return 0;
@@ -431,6 +444,7 @@ int port_thread_attach_local(port_tls_data_t* tlsdata, Boolean temp,
 
     memset(tlsdata, 0, sizeof(port_tls_data_t));
 
+    printf("PMQ - foreign = %i\n", foreign);
     tlsdata->foreign = foreign;
     res = init_stack(tlsdata, stack_size, temp);
     if (res != 0) return res;
@@ -639,8 +653,12 @@ void port_thread_yield_other(osthread_t os_thread) {
         // signal sent, let's do timed wait to make sure the signal
         // was actually delivered
         get_exceed_time(&timeout, 10000000L);
+#if defined(MACOSX)
+	err = sem_wait(PSD->yield_sem_ptr);
+#else
         err = sem_timedwait(&PSD->yield_sem, &timeout);
 //        sem_wait(&PSD->yield_sem);
+#endif
     } else {
         if (pinfo)
             suspend_remove_thread(os_thread);
@@ -693,7 +711,11 @@ int port_thread_suspend(osthread_t thread)
     }
 
     /* Waiting for suspendee response */
+#if defined(MACOSX)
+    sem_wait(pinfo->wake_sem_ptr);
+#else
     sem_wait(&pinfo->wake_sem);
+#endif
     /* Check result */
     status = (pinfo->suspend_count > 0) ? 0 : -1;
 
@@ -738,7 +760,11 @@ int port_thread_resume(osthread_t thread)
     }
 
     /* Waiting for resume notification */
+#if defined(MACOSX)
+    sem_wait(pinfo->wake_sem_ptr);
+#else
     sem_wait(&pinfo->wake_sem);
+#endif
 
     suspend_remove_thread(thread);
 
@@ -875,7 +901,15 @@ static port_thread_info_t* init_susres_list_item()
 
     pinfo->suspend_count = 0;
 
+
+#if defined(MACOSX)
+    int status = 0;
+    pinfo->wake_sem_ptr = sem_open(WAKE_SEM_NAME, O_CREAT, 0644, 0);
+    if (pinfo->wake_sem_ptr == SEM_FAILED)
+      status = -1;
+#else
     int status = sem_init(&pinfo->wake_sem, 0, 0);
+#endif
 
     if (status != 0)
     {
@@ -914,7 +948,12 @@ static void suspend_remove_thread(osthread_t thread)
 
     if (pinfo != NULL)
     {
+#if defined(MACOSX)
+        sem_destroy(pinfo->wake_sem_ptr);
+#else
         sem_destroy(&pinfo->wake_sem);
+#endif
+
         *pprev = pinfo->next;
         free(pinfo);
     }
@@ -949,7 +988,12 @@ static void sigusr2_handler(int signum, siginfo_t* info, void* context)
     {
         PSD->req_type = THREADREQ_NONE;
         /* Inform requester */
+#if defined(MACOSX)
+        sem_post(PSD->yield_sem_ptr);
+#else
         sem_post(&PSD->yield_sem);
+#endif
+
         return;
     }
 
@@ -968,7 +1012,11 @@ static void sigusr2_handler(int signum, siginfo_t* info, void* context)
         PSD->req_type = THREADREQ_NONE;
         memcpy(&pinfo->context, context, sizeof(ucontext_t));
         /* Inform suspender */
+#if defined(MACOSX)
+        sem_post(pinfo->wake_sem_ptr);
+#else
         sem_post(&pinfo->wake_sem);
+#endif
 
         do
         {
@@ -981,7 +1029,12 @@ static void sigusr2_handler(int signum, siginfo_t* info, void* context)
         /* We have returned from THREADREQ_RES handler */
         memcpy(context, &pinfo->context, sizeof(ucontext_t));
         /* Inform suspender */
+#if defined(MACOSX)
+        sem_post(pinfo->wake_sem_ptr);
+#else
         sem_post(&pinfo->wake_sem);
+#endif
+
         return;
     }
     else if (PSD->req_type == THREADREQ_RES)

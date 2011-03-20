@@ -61,6 +61,7 @@ static int init_psd_structure(port_shared_data_t* data)
 
     pthread_attr_init(&pthread_attr);
     err = pthread_attr_getstacksize(&pthread_attr, &stack_size);
+    printf("init_psd_structure: stack_size = %li\n", stack_size);
     pthread_attr_destroy(&pthread_attr);
 
     if (err != 0)
@@ -68,17 +69,29 @@ static int init_psd_structure(port_shared_data_t* data)
 
     pthread_attr_init(&pthread_attr);
     err = pthread_attr_getguardsize(&pthread_attr, &guard_size);
+    printf("init_psd_structure: guard_size = %li\n", guard_size);
     pthread_attr_destroy(&pthread_attr);
 
+    printf("init_psd_structure: err = %i\n", err);
     if (err != 0)
         return err;
 
-    if (sem_init(&data->yield_sem, 0, 0) != 0)
+#if defined(MACOSX)
+    data->yield_sem_ptr = sem_open(YIELD_SEM_NAME, O_CREAT, 0644, 0);
+    if (data->yield_sem_ptr == SEM_FAILED)
+      err = -1;
+#else
+    err = sem_init(&data->yield_sem, 0, 0);
+#endif
+    if (err != 0) {
+        printf("init_psd_structure: sem_init/sem_open = %i\n", err);
         return err;
+    }
 
     data->foreign_stack_size = stack_size;
     data->guard_page_size = guard_size;
     data->mem_protect_size = MEM_PROTECT_SIZE;
+    printf("init_psd_structure: mem_protect_size = %li\n", data->mem_protect_size);
     data->req_type = THREADREQ_NONE;
     data->signal_set = FALSE;
 

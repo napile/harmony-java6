@@ -30,6 +30,11 @@
 /* The name of Port shared library - now crash handler module */
 #define CH_SHLIB_NAME "ch"
 
+#ifdef MACOSX
+#define YIELD_SEM_NAME "hy-yield-sem"
+#define WAKE_SEM_NAME "hy-wake-sem"
+#endif
+
 #ifdef WIN32
 typedef DWORD port_tls_key_t;
 #else
@@ -54,6 +59,9 @@ struct port_thread_info_t
 #ifndef WIN32
     sem_t                   wake_sem;       /* to sem_post from signal handler */
 #endif /* !WIN32 */
+#ifdef MACOSX
+    sem_t*                  wake_sem_ptr;   /* to sem_post from signal handler */
+#endif
     port_thread_info_t*       next;
 };
 
@@ -77,6 +85,9 @@ typedef struct
     port_suspend_req_t req_type; /* request type for signal handler */
     osthread_t suspendee; /* The thread which is processed */
     sem_t yield_sem; /* Semaphore to inform signal sender */
+#ifdef MACOSX
+    sem_t* yield_sem_ptr; /* Semaphore to inform signal sender */
+#endif
     Boolean signal_set; /* Is SIGUSR2 handler set up */
 #endif /* !WIN32 */
 
