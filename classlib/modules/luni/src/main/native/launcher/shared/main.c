@@ -1196,7 +1196,10 @@ addDirsToPath (int count, char *newPathToAdd[], char **argv)
   int found = 0;
   int i = 0;
   int strLen = 0;
+#if defined(MACOSX)
   pid_t forkPid;
+  int forkStatus;
+#endif
 
 #ifndef HY_NO_THR
   PORT_ACCESS_FROM_PORT (portLibrary);
@@ -1275,14 +1278,12 @@ addDirsToPath (int count, char *newPathToAdd[], char **argv)
   rc = putenv (newPath);
 
 #if defined(MACOSX)
-  printf("start\n");
   forkPid = fork();
   if (forkPid < 0) {
     // FIXME use an error code / message
     perror("fork error");
 
   } else if (forkPid == 0) {
-    // printf("child");
     printf("child - exeName = %s\n", exeName);
     printf("child - forkPid = %i\n", forkPid);
     rc = execv (exeName, argv);
@@ -1291,9 +1292,12 @@ addDirsToPath (int count, char *newPathToAdd[], char **argv)
   } else {
     // don't do anything
     printf("parent - forkPid = %i\n", forkPid);
-    sleep(10);
-    exit(EXIT_SUCCESS);
-    rc = 0;
+
+    if (waitpid(forkPid, &forkStatus, 0) == -1){
+      rc = forkStatus;
+    } else {
+      rc = 0;
+    }
   }
 #else
   execv (exeName, argv);
