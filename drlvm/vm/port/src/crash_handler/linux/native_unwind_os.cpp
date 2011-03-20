@@ -67,7 +67,6 @@ bool native_get_stack_range(UnwindContext* context, Registers* regs, native_segm
     err = pthread_attr_get_np(thread, &pthread_attr);
 #elif defined(MACOSX)
     // FIXME PMQ do something right
-    pthread_attr_init(&pthread_attr);
     err = 0;
 #else
     err = pthread_getattr_np(thread, &pthread_attr);
