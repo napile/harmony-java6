@@ -310,7 +310,7 @@ hyvmem_reserve_memory (struct HyPortLibrary *portLibrary, void *address,
    */
   key_t addressKey;
   void *baseAddress;
-#if defined(FREEBSD)
+#if defined(FREEBSD) || defined(MACOSX)
 /*
  * TODO: This does not work but it does compile.  Need a real fix.  Anyone
  * know how to reserve memory on FreeBSD?

@@ -62,7 +62,7 @@
 #endif
 
 #define CDEV_CURRENT_FUNCTION _prototypes_private
-#if !defined(FREEBSD)
+#if !defined(FREEBSD) && !defined(MACOSX)
 static IDATA readSymbolicLink (struct HyPortLibrary *portLibrary,
                                char *linkFilename, char **result);
 #if !defined(LINUX)
@@ -523,7 +523,7 @@ cleanup:
 
 #undef CDEV_CURRENT_FUNCTION
 
-#if !defined(FREEBSD)
+#if !defined(FREEBSD) || !defined(MACOSX)
 #define CDEV_CURRENT_FUNCTION readSymbolicLink
 /**
  * @internal  Attempts to read the contents of a symbolic link.  (The contents are the relative pathname of
