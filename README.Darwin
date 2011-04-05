@@ -1,0 +1,9 @@
+# install using MacPorts
+port install jpeg
+port install lcms
+port install libpng
+port install freetype
+
+# you may have to symlink some dylibs for now
+#   in target/hdk/jdk/jre/bin/
+for dylib in default/*.dylib*; do ln -s $dylib; done
